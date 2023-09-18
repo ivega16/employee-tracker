@@ -23,7 +23,7 @@ function mainMenu(){
         type:"list",
         message:"What would you like to do?",
         name:"selection",
-        choices:["view all departments", "view all roles","view all employees","add a department","add a role","add an employee","update an employee role", "exit"]
+        choices:["view all departments", "view all roles","view all employees","add a department","add a role","add an employee","update an employee role"]
     })
     .then(answer=>{
         
@@ -51,7 +51,7 @@ function viewEmployees(){
   })
 }
 function addEmployee(){
-  db.query("SELECT id as value,title as name from role ", (err,roleData)=>{
+  db.query("SELECT id as value, title as name from role ", (err,roleData)=>{
      db.query("SELECT id as value, CONCAT(first_name,' ', last_name) as name FROM employee WHERE manager_id is null", (err, managerData)=>{
          inquirer.prompt([
             {
