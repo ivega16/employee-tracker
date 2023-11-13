@@ -27,7 +27,10 @@ function mainMenu(){
     })
     .then(answer=>{
         
-        if(answer.selection==="view all employees"){
+        if(answer.selection === "view all departments") {
+            viewDepartments();
+        }
+        else if(answer.selection==="view all employees"){
             viewEmployees()
         }else if(answer.selection==="add an employee"){
             addEmployee()
@@ -35,7 +38,28 @@ function mainMenu(){
         else if(answer.selection==="update an employee role"){
            updateEmployeeRole()        
         }
+        else if (answer.selection === "view all roles") {
+            viewRoles();
+        }
+        else if (answer.selection === "Add a department") {
+            addDepartment();
+        }
 
+    })
+}
+//function to view all departments
+function viewDepartments() {
+    db.query(`SELECT * FROM department;`, (err, data) => {
+        printTable(data)
+        mainMenu()
+    })
+}
+
+//function to view all roles
+function viewRoles() {
+    db.query(`SELECT role.id, title, salary, name as department FROM role LEFT JOIN department ON department.id = role.department_id;`, (err, data) => {
+        printTable(data)
+        mainMenu()
     })
 }
 
