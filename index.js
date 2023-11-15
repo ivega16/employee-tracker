@@ -15,7 +15,7 @@ db.connect(()=>{
 })
 
 /*
-view all departments, view all roles, view all employees, add a department, add a role, add an employee, and update an employee role
+List of options: view all departments, view all roles, view all employees, add a department, add a role, add an employee, and update an employee role
 */
 
 function mainMenu(){
@@ -30,19 +30,23 @@ function mainMenu(){
         if(answer.selection === "view all departments") {
             viewDepartments();
         }
+        else if (answer.selection === "view all roles") {
+            viewRoles();
+        }
         else if(answer.selection==="view all employees"){
             viewEmployees()
-        }else if(answer.selection==="add an employee"){
+        }
+        else if (answer.selection === "Add a department") {
+            addDepartment();
+        }
+        else if (answer.selection === "Add a role") {
+            addRole();
+        }
+        else if(answer.selection==="add an employee"){
             addEmployee()
         }
         else if(answer.selection==="update an employee role"){
            updateEmployeeRole()        
-        }
-        else if (answer.selection === "view all roles") {
-            viewRoles();
-        }
-        else if (answer.selection === "Add a department") {
-            addDepartment();
         }
 
     })
@@ -73,6 +77,49 @@ function viewEmployees(){
     printTable(data)
     mainMenu()
   })
+}
+function addDepartment() {
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "What is the name of the department?",
+            name: "name"
+        }
+    ]).then(answer => {
+        // Insert the new department into db
+        db.query(`INSERT INTO department (name) VALUES(?)`, [answer.name], err => {
+            console.log("Department added successfully!");
+            viewDepartments();
+        })
+    })
+}
+// Function to add a role
+function addRole() {
+    db.query(`SELECT id as value, name FROM department `, (err, departmentData) => {
+        inquirer.prompt([
+            {
+                type: "input",
+                message: "What is the name of the role?",
+                name: "title"
+            },
+            {
+                type: "input",
+                message: "What is the salary of the role?",
+                name: "salary"
+            },
+            {
+                type: "list",
+                message: "Which department does the role belong to?",
+                name: "department_id",
+                choices: departmentData
+            }
+        ]).then(answer => {
+            db.query(`INSERT INTO role (title, salary, department_id) VALUES(?,?,?)`, [answer.title, answer.salary, answer.department_id], err => {
+                console.log("Role added successfully!");
+                viewRoles();
+            })
+        })
+    })
 }
 function addEmployee(){
   db.query("SELECT id as value, title as name from role ", (err,roleData)=>{
