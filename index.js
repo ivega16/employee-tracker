@@ -36,10 +36,10 @@ function mainMenu(){
         else if(answer.selection==="view all employees"){
             viewEmployees()
         }
-        else if (answer.selection === "Add a department") {
+        else if (answer.selection === "add a department") {
             addDepartment();
         }
-        else if (answer.selection === "Add a role") {
+        else if (answer.selection === "add a role") {
             addRole();
         }
         else if(answer.selection==="add an employee"){
